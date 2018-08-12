@@ -1,0 +1,59 @@
+<html>
+  <head>
+    <style>
+html, body {
+height: 100%;
+font-size: 12px;
+}
+
+#container {
+min-height: 100%;
+margin-bottom: -5em;
+position: relative;
+}
+
+#header {
+  background: red;
+}
+
+#sidebar {
+  position:absolute; 
+  left:0px;
+  width: 20%;
+  display: flex;
+}
+
+#footer {
+height: 5em;
+position: relative;
+background: pink;
+}
+
+#content {
+  background: orange;
+  display: flex;
+}
+
+.clearfooter {
+height: 5em;
+clear: both;
+}
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div id="header">
+        <div id="nav">
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Page 1</a></li>
+            <li><a href="#">Page 2</a></li>
+          </ul>
+        </div>
+      </div>
+      <div id="sidebar">sidebar here</div>
+      <div id="content">Content Here.</div>
+      <div class="clearfooter"></div>
+    </div>
+    <div id="footer">Footer Here.</div>
+  </body>

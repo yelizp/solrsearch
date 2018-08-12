@@ -1,0 +1,60 @@
+<mat-drawer-container class="container" autosize>
+  <mat-drawer #drawer class="sidenav" mode="side">
+    <mat-card>
+      <mat-form-field class="search" appearance="outline">
+        <mat-label>Ara</mat-label>
+        <input matInput placeholder="Placeholder" [(ngModel)]="searchText"
+          type="search" (search)="search()" />
+        <mat-icon matSuffix>search</mat-icon>
+        <mat-hint>"must" ile başlayan tüm dokümanları getirmek için "must*"</mat-hint>
+      </mat-form-field>
+    </mat-card>
+
+    <mat-accordion>
+      <mat-expansion-panel (opened)="panelOpenState= true"
+        (closed)="panelOpenState= false">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Self aware panel
+          </mat-panel-title>
+          <mat-panel-description>
+            Currently I am {{panelOpenState ? 'open' : 'closed'}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <p>I'm visible because I am open</p>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-drawer>
+  <div class="sidenav-content">
+         
+    <button class="toggle-sidebar" mat-button (click)="drawer.toggle()">
+      <mat-icon>navigate_next</mat-icon>
+    </button>
+
+    <div class="container">
+          <mat-paginator [length]="totalPages"
+          [pageIndex]="pageIndex"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="[5,10,20]"
+          (page)="pageEvent($event)">
+    </mat-paginator>
+      <mat-card *ngFor="let result of filteredResults" class="result">
+        <mat-card-header>
+          <mat-card-title>{{result.title}}</mat-card-title>
+        </mat-card-header>
+      </mat-card>
+    </div>
+    <!--
+    <mat-nav-list>
+        <mat-list-item *ngFor="let result of filteredResults">
+           <a matLine [href]="result.url"><mat-icon>info</mat-icon></a>              
+              {{result.albumId}}
+              {{result.title}}
+        </mat-list-item>
+      </mat-nav-list>
+-->
+    <mat-progress-spinner [style.display]="showSpinner ? 'block' : 'none'"
+      color="primary" mode="indeterminate"></mat-progress-spinner>
+  </div>
+
+</mat-drawer-container>

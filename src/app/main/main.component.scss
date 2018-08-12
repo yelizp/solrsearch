@@ -1,0 +1,47 @@
+.container {
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+  }
+  
+  .sidenav-content {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .sidenav {
+    padding: 20px;
+    width: 30%;
+  }
+
+  .mat-button {
+    padding: 0 2em 0 0;
+    min-width: 2em;
+  }
+  
+  .toggle-sidebar {
+      z-index: 100;
+      position: absolute;
+      height: 2em;
+      width: 1em;
+      top:1em;
+      left: 0em;
+      border:none;
+      background-color: #3f51b5;
+      color: white;
+      font-size: 1em;
+      font-weight: lighter;
+  }
+  .search {
+    width: 100%;
+  }
+  .example-margin {
+  margin: 0 10px;
+}
+
+.mat-card {
+  .result {
+    padding: 0.1 em 2em 0.1 em 3em;
+  }
+}

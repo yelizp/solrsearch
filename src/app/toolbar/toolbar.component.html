@@ -1,0 +1,12 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <!-- <img src="/assets/logo.png" alt="İş Bankası" style="height: 3em; width: auto"/> -->
+    <span><code>&lt;meta&gt;</code>pedia</span>
+    <span class="spacer"></span>
+    <mat-icon class="icon" [matMenuTriggerFor]="menu">menu</mat-icon>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item>Item 1</button>
+        <button mat-menu-item>Item 2</button>
+      </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>

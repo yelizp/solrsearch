@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <style>
+            body {
+                font-weight: 900;
+                font-size:20px;
+                padding: 0;
+            }
+
+            .container {
+                width: 100%;
+                display: grid;
+                grid-template-areas:
+                'header header header header header header'
+                'sidebar main main main main main'
+                'sidebar footer footer footer footer footer';
+                grid-gap: 10px;
+            }
+            .header {
+                grid-area: header;
+                background-color: darkblue;                
+            }
+            .sidebar {
+                grid-area: sidebar;
+                background-color: red;
+            }
+            .main {
+                grid-area: main;
+                background-color: black;
+            }
+            .footer {
+                grid-area: footer;
+                background-color: yellow;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="grid-container">
+            <div class="header">head</div>
+            <div class="sidebar">sidebar</div>
+            <div class="main">main</div>
+            <div class="footer">footer</div>
+        </div>
+    </body>
+</html>
