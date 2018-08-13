@@ -18,7 +18,7 @@ export class SolrQueryParams implements Serializable<SolrQueryParams> {
     facet:boolean = true;       // enable faceting
     facetLimit: number = -1;    // Facet limit
     facetMinCount: number = 1;  // Facet min count
-    facetFields: string[] = ['title'];  // Facet field list separated by comma
+    facetFields: string[] = [];  // Facet field list separated by comma
     facetFieldLimitMap = new Object(); // Facet field limit
 
     constructor() {}
@@ -37,9 +37,9 @@ export class SolrQueryParams implements Serializable<SolrQueryParams> {
         this.hl = json.params.hl;
         this.hlFl = json.params["hl.fl"];
         this.facet = json.params.facet;
-        this.facetLimit = json.params.facetLimit;
-        this.facetFields = JSON.parse(json.params.facetField);
-        this.facetMinCount = json.params.facet.facetMinCount;
+        this.facetLimit = json.params["facet.limit"];
+        this.facetFields = json.params["facet.field"].slice(0);
+        this.facetMinCount = json.params.facet["facet.mincount"];
 
         return this;
     }
@@ -49,12 +49,12 @@ export class SolrQueryParams implements Serializable<SolrQueryParams> {
     }
 
     toQueryString() {
-        let query = (this.q) ? `q=${this.q}` : "*:*";
+        let query = (this.q) ? `q=${this.q}` : "q=*:*";
         query += (this.qOp) ? `&q.op=${this.qOp}` : "";
         query += (this.df) ? `&df=${this.df}` : "";
         query += (this.sow) ? `&sow=${this.sow}` : "";
         query += (this.indent) ? `&indent=${this.indent}` : "";
-        query += (this.wt) ? `&wt=${this.wt}` : "json";
+        query += (this.wt) ? `&wt=${this.wt}` : "&wt=json";
         query += (this.fl) ? `&fl=${this.fl}` : "";
         query += (this.start)? `&start=${this.start}` : "";
         query += (this.rows) ? `&rows=${this.rows}` : "";

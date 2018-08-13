@@ -11,6 +11,7 @@ import { SolrQueryParams } from '../model/solr.query.params.model';
 })
 export class MainComponent implements OnInit {
   @Input('searchText') searchText : string;
+  queryParameters : SolrQueryParams;
   showSpinner:Boolean = false;
   filteredResults:Result[] = [];
   pageSize:number = 10;
@@ -35,6 +36,11 @@ export class MainComponent implements OnInit {
     params.rows = this.pageSize;
     params.start = this.pageIndex;
     params.q = this.searchText;
+    params.facet = true;
+    params.facetFields = ['title_str'];
+    params.facetLimit = 10;
+    params.addFacetFieldLimit['title_str'] = 20;
+    this.queryParameters = params;
 
     this.searchService.search(params).subscribe(data=> {
       let response = new SolrResponse().deserialize(data);
