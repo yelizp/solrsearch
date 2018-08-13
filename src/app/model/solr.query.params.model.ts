@@ -11,9 +11,15 @@ export class SolrQueryParams implements Serializable<SolrQueryParams> {
     start: number = 0;          // Starting page index 
     rows: number = 10;          // Number of records to be returned
     fq: string = "";            // Filter query e.g. "fq=(catid:90 OR catid:81) AND  priceEng:[38 TO 40]"
+    // Highlighting params
     hl: string = "";            // Highlight (on/off)
     hlFl: string = ""           // Fields to highlight on
-    //TODO: Add parameters used for faceting as well
+    // Facet params
+    facet:boolean = true;       // enable faceting
+    facetLimit: number = -1;    // Facet limit
+    facetMinCount: number = 1;  // Facet min count
+    facetFields: string[] = ['title'];  // Facet field list separated by comma
+    facetFieldLimitMap = new Object(); // Facet field limit
 
     constructor() {}
 
@@ -30,6 +36,11 @@ export class SolrQueryParams implements Serializable<SolrQueryParams> {
         this.fq = json.params.fq;
         this.hl = json.params.hl;
         this.hlFl = json.params["hl.fl"];
+        this.facet = json.params.facet;
+        this.facetLimit = json.params.facetLimit;
+        this.facetFields = JSON.parse(json.params.facetField);
+        this.facetMinCount = json.params.facet.facetMinCount;
+
         return this;
     }
 
@@ -38,44 +49,31 @@ export class SolrQueryParams implements Serializable<SolrQueryParams> {
     }
 
     toQueryString() {
-        let query = "";
-        if(this.q === undefined || this.q === null || this.q.length === 0) {
-            this.q = "*:*";
-        }
-        query = `q=${this.q}`;
-        if(this.qOp !== undefined && this.qOp !== null && this.df.length > 0) {
-            query += `&q.op=${this.qOp}`;
-        }
-        if(this.df !== undefined && this.df !== null && this.df.length > 0) {
-            query += `&df=${this.df}`;
-        }
-        if(this.sow !== undefined && this.sow !== null && this.sow === true) {
-            query += `&sow=${this.sow}`;
-        }
-        if(this.indent !== undefined && this.indent !== null && this.indent.length > 0) {
-            query += `&indent=${this.indent}`;
-        }
-        if(this.wt !== undefined && this.wt === null || this.wt.length === 0) {
-            this.wt = "json";
-        }
-        query += `&wt=${this.wt}`;
-        if(this.fl !== undefined && this.fl !== null && this.fl.length > 0) {
-            query += `&fl=${this.fl}`;
-        }
-        if(this.start !== undefined ) {
-            query += `&start=${this.start}`;
-        }
-        if(this.rows !== undefined ) {
-            query += `&rows=${this.rows}`;
-        }
-        if(this.fq !== undefined && this.fq !== null && this.fq.length > 0) {
-            query += `&fq=${this.fq}`;
-        }
-        if(this.hl !== undefined && this.hl !== null && this.hl.length > 0) {
-            query += `&hl=${this.hl}`;
-        }
-        if(this.hlFl !== undefined && this.hlFl !== null && this.hlFl.length > 0) {
-            query += `&hl.fl=${this.hlFl}`;
+        let query = (this.q) ? `q=${this.q}` : "*:*";
+        query += (this.qOp) ? `&q.op=${this.qOp}` : "";
+        query += (this.df) ? `&df=${this.df}` : "";
+        query += (this.sow) ? `&sow=${this.sow}` : "";
+        query += (this.indent) ? `&indent=${this.indent}` : "";
+        query += (this.wt) ? `&wt=${this.wt}` : "json";
+        query += (this.fl) ? `&fl=${this.fl}` : "";
+        query += (this.start)? `&start=${this.start}` : "";
+        query += (this.rows) ? `&rows=${this.rows}` : "";
+        query += (this.fq) ? `&fq=${this.fq}` : "";
+        query += (this.hl) ? `&hl=${this.hl}` : "";
+        query += (this.hlFl)? `&hl.fl=${this.hlFl}` : "";
+        query += (this.facet)? `&facet=${this.facet}` : "";
+        query += (this.facetLimit)? `&facet.limit=${this.facetLimit}` : "";
+        query += (this.facetMinCount) ? `&facet.mincount=${this.facetMinCount}` : "";
+        if(this.facetFields) {
+            this.facetFields.forEach(field => query += `&facet.field=${field}`);
+            if(this.facetFieldLimitMap) {
+                this.facetFields.forEach( field => {
+                    let value = this.facetFieldLimitMap[field];
+                    if(value) {
+                        query += `&f.field.facet.limit=${value}`;
+                    }
+                });
+            }
         }
         return encodeURI(query);
     }
@@ -126,5 +124,32 @@ export class SolrQueryParams implements Serializable<SolrQueryParams> {
 
     setHlFl(value:string) {
         this.hlFl = value;
+    }
+    setFacet(value:boolean) {
+        this.facet = value;
+    }
+    setFacetLimit(value:number) {
+        this.facetLimit = value;
+    }
+    addFacetField(value:string) {
+        if(this.facetFields === undefined || this.facetFields === null) {
+            this.facetFields = [];
+        }
+        this.facetFields.push(value);
+    }
+    removeFacetField(value:string) {
+        this.facetFields = this.facetFields.filter(field => field !== value).slice(0);
+    }
+    clearFacetFields() {
+        this.facetFields = [];
+    }
+    setFacetMinCount(value:number) {
+        this.facetMinCount = value;
+    }
+    addFacetFieldLimit(fieldName:string, value:number) {
+        this.facetFieldLimitMap[fieldName] = value;
+    }
+    removeFacetFieldLimit(fieldName:string) {
+        this.facetFieldLimitMap[fieldName] = null;
     }
 }
