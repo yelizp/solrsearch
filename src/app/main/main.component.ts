@@ -12,7 +12,6 @@ import { SolrQueryParams } from '../model/solr.query.params.model';
 export class MainComponent implements OnInit {
   @Input('searchText') searchText : string;
   showSpinner:Boolean = false;
-  searchResults:Result[] = [];
   filteredResults:Result[] = [];
   pageSize:number = 10;
   totalPages:number = 0;
@@ -23,21 +22,7 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit() {
-    /*
-    this.searchService.getData().subscribe(data =>{
-      this.searchResults = data.map(json=> new Result().deserialize(json));
-      console.log(data);
-    });
-    */
-    this.searchService.search(new SolrQueryParams()).subscribe(data=> {
-      let response = new SolrResponse().deserialize(data);
-      this.totalPages = response.body.numFound / response.header.params.rows ;
-      this.pageIndex= response.header.params.start;
-      this.pageSize = response.header.params.rows ;
-      this.searchResults = response.body.docs;
-      this.filteredResults = this.searchResults.slice(0);
-      console.log(data);
-    });
+    this.search()
   }
 
   search() {
@@ -46,7 +31,6 @@ export class MainComponent implements OnInit {
       this.showSpinner = false;
     }, 2000);
  */ 
-    //this.filteredResults = this.searchResults.filter(result=> result.title.indexOf(this.searchText.toLocaleLowerCase()) > 0);
     let params = new SolrQueryParams();
     params.rows = this.pageSize;
     params.start = this.pageIndex;
@@ -54,11 +38,10 @@ export class MainComponent implements OnInit {
 
     this.searchService.search(params).subscribe(data=> {
       let response = new SolrResponse().deserialize(data);
-      this.totalPages = response.body.numFound / response.header.params.rows ;
+      this.totalPages = response.body.numFound;
       this.pageIndex= response.header.params.start;
       this.pageSize = response.header.params.rows ;
-      this.searchResults = response.body.docs;
-      this.filteredResults = this.searchResults.slice(0);
+      this.filteredResults = response.body.docs;
       console.log(data);
     });
 

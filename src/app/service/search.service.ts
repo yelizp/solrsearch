@@ -7,15 +7,17 @@ import { SolrQueryParams } from '../model/solr.query.params.model';
 //https://youtu.be/fh2GyYQcuxU
 @Injectable()
 export class SearchService {
+    serviceUrl = 'http://localhost:8983/solr/metapedia';
+
     constructor(private http:HttpClient) {}
 
     public getData() {
         //return this.http.get<Result[]>('https://jsonplaceholder.typicode.com/photos');        
-        return this.http.get<SolrResponse[]>('http://localhost:8983/solr/metapedia/select?q=*:*');
+        return this.http.get<SolrResponse[]>(this.serviceUrl + '/select?q=*:*');
     }
 
     public search(query: SolrQueryParams) {
-        let url = 'http://localhost:8983/solr/metapedia/select?' + query.toQueryString();
+        let url = this.serviceUrl + '/select?' + query.toQueryString();
         console.log(url);
         return this.http.get<SolrResponse[]>(url);
     }

@@ -1,5 +1,5 @@
-<mat-drawer-container class="container" autosize>
-  <mat-drawer #drawer class="sidenav" mode="side">
+<mat-drawer-container class="container" autosize hasBackdrop="true">
+  <mat-drawer #drawer class="sidenav" mode="push">
     <mat-card>
       <mat-form-field class="search" appearance="outline">
         <mat-label>Ara</mat-label>
@@ -25,36 +25,40 @@
       </mat-expansion-panel>
     </mat-accordion>
   </mat-drawer>
-  <div class="sidenav-content">
-         
-    <button class="toggle-sidebar" mat-button (click)="drawer.toggle()">
-      <mat-icon>navigate_next</mat-icon>
+  <mat-drawer-content>
+
+    <button class="toggle-sidebar" mat-raised-button (click)="drawer.toggle()">
+      <mat-icon>filter_list</mat-icon>
     </button>
 
-    <div class="container">
-          <mat-paginator [length]="totalPages"
-          [pageIndex]="pageIndex"
-          [pageSize]="pageSize"
-          [pageSizeOptions]="[5,10,20]"
-          (page)="pageEvent($event)">
+    <mat-paginator class="paginator" [length]="totalPages"
+      [pageIndex]="pageIndex"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[5,10,20]"
+      (page)="pageEvent($event)">
     </mat-paginator>
-      <mat-card *ngFor="let result of filteredResults" class="result">
-        <mat-card-header>
-          <mat-card-title>{{result.title}}</mat-card-title>
-        </mat-card-header>
-      </mat-card>
-    </div>
-    <!--
-    <mat-nav-list>
-        <mat-list-item *ngFor="let result of filteredResults">
-           <a matLine [href]="result.url"><mat-icon>info</mat-icon></a>              
-              {{result.albumId}}
-              {{result.title}}
-        </mat-list-item>
-      </mat-nav-list>
--->
+  <!--
+    <mat-card *ngFor="let result of filteredResults" class="result">
+      <mat-card-header>
+        <mat-card-title>{{result.title}}</mat-card-title>
+        <mat-card-subtitle>Subtitle</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>Content goes here</mat-card-content>
+    </mat-card>
+  -->
+    <mat-list>
+      <mat-list-item *ngFor="let result of filteredResults">
+        <h3 matLine> {{result.title}} </h3>
+        <p matLine>
+          <span> {{result.url}} </span>
+  <!--          <span class="demo-2"> -- {{message.content}} </span>-->
+        </p>
+        <mat-icon matListIcon style="position: absolute;right:2em;">subject</mat-icon>
+      </mat-list-item>
+    </mat-list>
+
     <mat-progress-spinner [style.display]="showSpinner ? 'block' : 'none'"
       color="primary" mode="indeterminate"></mat-progress-spinner>
-  </div>
+  </mat-drawer-content>
 
 </mat-drawer-container>

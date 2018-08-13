@@ -1,11 +1,13 @@
-.container {
-    width: 100%;
+.main.container {
     border: 1px solid rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top:0;
   }
   
   .sidenav-content {
+    min-height: 30em;
     display: flex;
-    height: 100%;
+    height: auto;
     align-items: center;
     justify-content: center;
   }
